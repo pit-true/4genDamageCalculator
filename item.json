@@ -1,233 +1,978 @@
 [
   {
-    "name": "シルクのスカーフ", 
-    "type": "ノーマル", 
-    "a": 1.1,
+    "name": "シルクのスカーフ",
+    "type": "ノーマル",
+    "modifier": 1.2,
     "timing": "attackMod",
-    "description": "ノーマルタイプの技の威力が1.1倍になる",
-    "romaji":"sirukunosuka-fu"
+    "fling_power": 10,
+    "description": "ノーマルタイプの技の威力が1.2倍になる",
+    "romaji": "sirukunosuka-fu"
   },
   {
-    "name": "しんぴのしずく", 
-    "type": "みず", 
-    "c": 1.1,
+    "name": "しんぴのしずく",
+    "type": "みず",
+    "modifier": 1.2,
     "timing": "attackMod",
-    "description": "みずタイプの技の威力が1.1倍になる",
-    "romaji":"sinpinosizuku"
+    "fling_power": 30,
+    "description": "みずタイプの技の威力が1.2倍になる",
+    "romaji": "sinpinosizuku"
   },
   {
-    "name": "きせきのたね", 
-    "type": "くさ", 
-    "c": 1.1,
+    "name": "きせきのたね",
+    "type": "くさ",
+    "modifier": 1.2,
     "timing": "attackMod",
-    "description": "くさタイプの技の威力が1.1倍になる",
-    "romaji":"kisekinotane"
+    "fling_power": 30,
+    "description": "くさタイプの技の威力が1.2倍になる",
+    "romaji": "kisekinotane"
   },
   {
-    "name": "もくたん", 
-    "type": "ほのお", 
-    "c": 1.1,
+    "name": "もくたん",
+    "type": "ほのお",
+    "modifier": 1.2,
     "timing": "attackMod",
-    "description": "ほのおタイプの技の威力が1.1倍になる",
-    "romaji":"mokutan"
+    "fling_power": 30,
+    "description": "ほのおタイプの技の威力が1.2倍になる",
+    "romaji": "mokutan"
   },
   {
-    "name": "じしゃく", 
-    "type": "でんき", 
-    "c": 1.1,
+    "name": "じしゃく",
+    "type": "でんき",
+    "modifier": 1.2,
     "timing": "attackMod",
-    "description": "でんきタイプの技の威力が1.1倍になる",
-    "romaji":"jisyaku"
+    "fling_power": 30,
+    "description": "でんきタイプの技の威力が1.2倍になる",
+    "romaji": "jisyaku"
   },
   {
-    "name": "とけないこおり", 
-    "type": "こおり", 
-    "c": 1.1,
+    "name": "とけないこおり",
+    "type": "こおり",
+    "modifier": 1.2,
     "timing": "attackMod",
-    "description": "こおりタイプの技の威力が1.1倍になる",
-    "romaji":"tokenaikoori"
+    "fling_power": 30,
+    "description": "こおりタイプの技の威力が1.2倍になる",
+    "romaji": "tokenaikoori"
   },
   {
-    "name": "くろおび", 
-    "type": "かくとう", 
-    "a": 1.1,
+    "name": "くろおび",
+    "type": "かくとう",
+    "modifier": 1.2,
     "timing": "attackMod",
-    "description": "かくとうタイプの技の威力が1.1倍になる",
-    "romaji":"kuroobi"
+    "fling_power": 30,
+    "description": "かくとうタイプの技の威力が1.2倍になる",
+    "romaji": "kuroobi"
   },
   {
-    "name": "くろいメガネ", 
-    "type": "あく", 
-    "a": 1.1,
+    "name": "くろいメガネ",
+    "type": "あく",
+    "modifier": 1.2,
     "timing": "attackMod",
-    "description": "あくタイプの技の威力が1.1倍になる",
-    "romaji":"kuroimegane"
+    "fling_power": 30,
+    "description": "あくタイプの技の威力が1.2倍になる",
+    "romaji": "kuroimegane"
   },
   {
-    "name": "どくバリ", 
-    "type": "どく", 
-    "a": 1.1,
+    "name": "どくバリ",
+    "type": "どく",
+    "modifier": 1.2,
     "timing": "attackMod",
-    "description": "どくタイプの技の威力が1.1倍になる",
-    "romaji":"dokubari"
+    "fling_power": 70,
+    "description": "どくタイプの技の威力が1.2倍になる",
+    "romaji": "dokubari"
   },
   {
-    "name": "やわらかいすな", 
-    "type": "じめん", 
-    "a": 1.1,
+    "name": "やわらかいすな",
+    "type": "じめん",
+    "modifier": 1.2,
     "timing": "attackMod",
-    "description": "じめんタイプの技の威力が1.1倍になる",
-    "romaji":"yawarakaisuna"
+    "fling_power": 10,
+    "description": "じめんタイプの技の威力が1.2倍になる",
+    "romaji": "yawarakaisuna"
   },
   {
-    "name": "するどいくちばし", 
-    "type": "ひこう", 
-    "a": 1.1,
+    "name": "するどいくちばし",
+    "type": "ひこう",
+    "modifier": 1.2,
     "timing": "attackMod",
-    "description": "ひこうタイプの技の威力が1.1倍になる",
-    "romaji":"surudoikutibasi"
+    "fling_power": 50,
+    "description": "ひこうタイプの技の威力が1.2倍になる",
+    "romaji": "surudoikutibasi"
   },
   {
-    "name": "まがったスプーン", 
-    "type": "エスパー", 
-    "c": 1.1,
+    "name": "まがったスプーン",
+    "type": "エスパー",
+    "modifier": 1.2,
     "timing": "attackMod",
-    "description": "エスパータイプの技の威力が1.1倍になる",
-    "romaji":"magattasupu-n"
+    "fling_power": 30,
+    "description": "エスパータイプの技の威力が1.2倍になる",
+    "romaji": "magattasupu-n"
   },
   {
-    "name": "かたいいわ", 
-    "type": "いわ", 
-    "a": 1.1,
+    "name": "かたいいわ",
+    "type": "いわ",
+    "modifier": 1.2,
     "timing": "attackMod",
-    "description": "いわタイプの技の威力が1.1倍になる",
-    "romaji":"kataiiwa"
+    "fling_power": 100,
+    "description": "いわタイプの技の威力が1.2倍になる",
+    "romaji": "kataiiwa"
   },
   {
-    "name": "ぎんのこな", 
-    "type": "むし", 
-    "a": 1.1,
+    "name": "ぎんのこな",
+    "type": "むし",
+    "modifier": 1.2,
     "timing": "attackMod",
-    "description": "むしタイプの技の威力が1.1倍になる",
-    "romaji":"ginnnokona"
+    "fling_power": 10,
+    "description": "むしタイプの技の威力が1.2倍になる",
+    "romaji": "ginnnokona"
   },
   {
-    "name": "のろいのおふだ", 
-    "type": "ゴースト", 
-    "a": 1.1,
+    "name": "のろいのおふだ",
+    "type": "ゴースト",
+    "modifier": 1.2,
     "timing": "attackMod",
-    "description": "ゴーストタイプの技の威力が1.1倍になる",
-    "romaji":"noroinoofuda"
+    "fling_power": 30,
+    "description": "ゴーストタイプの技の威力が1.2倍になる",
+    "romaji": "noroinoofuda"
   },
   {
-    "name": "りゅうのキバ", 
-    "type": "ドラゴン", 
-    "c": 1.1,
+    "name": "りゅうのキバ",
+    "type": "ドラゴン",
+    "modifier": 1.2,
     "timing": "attackMod",
-    "description": "ドラゴンタイプの技の威力が1.1倍になる",
-    "romaji":"ryuunokiba"
+    "fling_power": 70,
+    "description": "ドラゴンタイプの技の威力が1.2倍になる",
+    "romaji": "ryuunokiba"
   },
   {
-    "name": "メタルコート", 
-    "type": "はがね", 
-    "a": 1.1,
+    "name": "メタルコート",
+    "type": "はがね",
+    "modifier": 1.2,
     "timing": "attackMod",
-    "description": "はがねタイプの技の威力が1.1倍になる",
-    "romaji":"metaruko-to"
+    "fling_power": 30,
+    "description": "はがねタイプの技の威力が1.2倍になる",
+    "romaji": "metaruko-to"
   },
   {
-    "name": "こだわりハチマキ", 
+    "name": "うしおのおこう",
+    "type": "みず",
+    "modifier": 1.2,
+    "timing": "attackMod",
+    "fling_power": 10,
+    "description": "みずタイプの技の威力が1.2倍になる"
+  },
+  {
+    "name": "さざなみのおこう",
+    "type": "みず",
+    "modifier": 1.2,
+    "timing": "attackMod",
+    "fling_power": 10,
+    "description": "みずタイプの技の威力が1.2倍になる"
+  },
+  {
+    "name": "おはなのおこう",
+    "type": "くさ",
+    "modifier": 1.2,
+    "timing": "attackMod",
+    "fling_power": 10,
+    "description": "くさタイプの技の威力が1.2倍になる"
+  },
+  {
+    "name": "あやしいおこう",
+    "type": "エスパー",
+    "modifier": 1.2,
+    "timing": "attackMod",
+    "fling_power": 10,
+    "description": "エスパータイプの技の威力が1.2倍になる"
+  },
+  {
+    "name": "がんせきおこう",
+    "type": "いわ",
+    "modifier": 1.2,
+    "timing": "attackMod",
+    "fling_power": 10,
+    "description": "いわタイプの技の威力が1.2倍になる"
+  },
+  {
+    "name": "こだわりハチマキ",
     "a": 1.5,
     "timing": "attackMod",
-    "description": "物理攻撃の威力が1.5倍になる",
-    "romaji":"kodawarihatimaki"
+    "fling_power": 10,
+    "description": "物理攻撃が1.5倍になる",
+    "romaji": "kodawarihatimaki"
   },
   {
-    "name": "こころのしずく", 
+    "name": "こだわりメガネ",
+    "c": 1.5,
+    "timing": "attackMod",
+    "fling_power": 10,
+    "description": "特殊攻撃が1.5倍になる"
+  },
+  {
+    "name": "こだわりスカーフ",
+    "fling_power": 10,
+    "description": "素早さが1.5倍になる"
+  },
+  {
+    "name": "いのちのたま",
+    "modifier": 1.3,
+    "timing": "powerMod",
+    "fling_power": 30,
+    "description": "攻撃技の威力が1.3倍になる"
+  },
+  {
+    "name": "たつじんのおび",
+    "modifier": 1.2,
+    "timing": "powerMod",
+    "condition": "super_effective",
+    "fling_power": 10,
+    "description": "効果抜群の技の威力が1.2倍になる"
+  },
+  {
+    "name": "ちからのハチマキ",
+    "modifier": 1.1,
+    "timing": "powerMod",
+    "category": "Physical",
+    "fling_power": 10,
+    "description": "物理技の威力が1.1倍になる"
+  },
+  {
+    "name": "ものしりメガネ",
+    "modifier": 1.1,
+    "timing": "powerMod",
+    "category": "Special",
+    "fling_power": 10,
+    "description": "特殊技の威力が1.1倍になる"
+  },
+  {
+    "name": "こころのしずく",
     "c": 1.5,
     "d": 1.5,
     "timing": "attackMod",
-    "description": "特殊攻撃と特殊防御が1.5倍になる（ラティオス/ラティアスが持った場合）",
-    "romaji":"kokoronosizuku"
+    "fling_power": 30,
+    "exclusive_pokemon": [
+      "ラティオス",
+      "ラティアス"
+    ],
+    "description": "特殊攻撃と特殊防御が1.5倍になる（ラティオス/ラティアス）",
+    "romaji": "kokoronosizuku"
   },
   {
     "name": "しんかいのキバ",
-    "c": 2.0, 
+    "c": 2,
     "timing": "attackMod",
-    "description": "特殊攻撃が2.0倍になる（パールルが持った場合）",
-    "romaji":"sinkainokiba"
+    "fling_power": 90,
+    "exclusive_pokemon": [
+      "パールル"
+    ],
+    "description": "特殊攻撃が2.0倍になる（パールル）",
+    "romaji": "sinkainokiba"
   },
   {
     "name": "しんかいのウロコ",
-    "d": 2.0, 
-    "description": "特殊防御が2.0倍になる（パールルが持った場合）",
-    "romaji":"sinkainouroko"
+    "d": 2,
+    "fling_power": 30,
+    "exclusive_pokemon": [
+      "パールル"
+    ],
+    "description": "特殊防御が2.0倍になる（パールル）",
+    "romaji": "sinkainouroko"
   },
   {
     "name": "でんきだま",
-    "a": 2.0, 
-    "c": 2.0, 
+    "a": 2,
+    "c": 2,
     "timing": "attackMod",
-    "description": "攻撃と特殊攻撃が2.0倍になる（ピカチュウが持った場合）",
-    "romaji":"denkidama"
+    "fling_power": 30,
+    "exclusive_pokemon": [
+      "ピカチュウ"
+    ],
+    "description": "攻撃と特殊攻撃が2.0倍になる（ピカチュウ）",
+    "romaji": "denkidama"
   },
   {
-    "name": "メタルパウダー", 
-    "b": 2.0,
-    "description": "防御が2倍になる（メタモンが持った場合）",
-    "romaji":"metarupauda-"
+    "name": "メタルパウダー",
+    "b": 2,
+    "fling_power": 10,
+    "exclusive_pokemon": [
+      "メタモン"
+    ],
+    "description": "防御が2.0倍になる（メタモン）",
+    "romaji": "metarupauda-"
   },
   {
-    "name": "ふといホネ", 
-    "a": 2.0,
+    "name": "ふといホネ",
+    "a": 2,
     "timing": "attackMod",
-    "description": "物理攻撃の威力が2.0倍になる（カラカラが持った場合）",
-    "romaji":"futoihone"
+    "fling_power": 90,
+    "exclusive_pokemon": [
+      "カラカラ",
+      "ガラガラ"
+    ],
+    "description": "物理攻撃が2.0倍になる（カラカラ/ガラガラ）",
+    "romaji": "futoihone"
   },
   {
-    "name": "ピントレンズ", 
+    "name": "ピントレンズ",
     "timing": "attackMod",
+    "fling_power": 30,
     "description": "急所に当たりやすくなる",
-    "romaji":"pintorenzu"
-  },  
+    "romaji": "pintorenzu"
+  },
   {
-    "name": "たべのこし", 
+    "name": "こんごうだま",
+    "types": [
+      "はがね",
+      "ドラゴン"
+    ],
+    "modifier": 1.2,
+    "timing": "attackMod",
+    "fling_power": 60,
+    "exclusive_pokemon": [
+      "ディアルガ"
+    ],
+    "description": "ディアルガのはがね/ドラゴン技の威力が1.2倍になる"
+  },
+  {
+    "name": "しらたま",
+    "types": [
+      "みず",
+      "ドラゴン"
+    ],
+    "modifier": 1.2,
+    "timing": "attackMod",
+    "fling_power": 60,
+    "exclusive_pokemon": [
+      "パルキア"
+    ],
+    "description": "パルキアのみず/ドラゴン技の威力が1.2倍になる"
+  },
+  {
+    "name": "はっきんだま",
+    "types": [
+      "ゴースト",
+      "ドラゴン"
+    ],
+    "modifier": 1.2,
+    "timing": "attackMod",
+    "fling_power": 60,
+    "exclusive_pokemon": [
+      "ギラティナ"
+    ],
+    "description": "ギラティナのゴースト/ドラゴン技の威力が1.2倍になる"
+  },
+  {
+    "name": "たべのこし",
+    "fling_power": 10,
     "description": "最大HPの1/16回復する",
-    "romaji":"tabenokosi"
+    "romaji": "tabenokosi"
   },
   {
-    "name": "オボンのみ", 
-    "description": "最大HPの1/2以下になったとき30回復する",
-    "romaji":"obonnnomi"
+    "name": "くろいヘドロ",
+    "fling_power": 30,
+    "description": "どくタイプは最大HPの1/16回復し、それ以外は最大HPの1/8ダメージを受ける"
   },
   {
-    "name": "フィラのみ", 
-    "description": "最大HPの1/2以下になったとき最大HPの1/8回復する",
-    "romaji":"firanomi"
-  },
-  {
-    "name": "ウイのみ", 
-    "description": "最大HPの1/2以下になったとき最大HPの1/8回復する",
-    "romaji":"uinomi"
-  },
-  {
-    "name": "マゴのみ", 
-    "description": "最大HPの1/2以下になったとき最大HPの1/8回復する",
-    "romaji":"magonomi"
-  },
-  {
-    "name": "バンジのみ", 
-    "description": "最大HPの1/2以下になったとき最大HPの1/8回復する",
-    "romaji":"banzinomi"
-  },
-  {
-    "name": "イアのみ", 
-    "description": "最大HPの1/2以下になったとき最大HPの1/8回復する",
-    "romaji":"ianomi"
-  },
-  {
-    "name": "ひかりのこな", 
+    "name": "ひかりのこな",
+    "fling_power": 10,
     "description": "持たせたポケモンに対するわざの命中率が0.9倍になる",
-    "romaji":"hikarinokona"
+    "romaji": "hikarinokona"
+  },
+  {
+    "name": "ひのたまプレート",
+    "type": "ほのお",
+    "modifier": 1.2,
+    "timing": "attackMod",
+    "judgment_type": "ほのお",
+    "fling_power": 90,
+    "description": "ほのおタイプの技の威力が1.2倍になり、さばきのつぶてがほのおタイプになる"
+  },
+  {
+    "name": "しずくプレート",
+    "type": "みず",
+    "modifier": 1.2,
+    "timing": "attackMod",
+    "judgment_type": "みず",
+    "fling_power": 90,
+    "description": "みずタイプの技の威力が1.2倍になり、さばきのつぶてがみずタイプになる"
+  },
+  {
+    "name": "いかずちプレート",
+    "type": "でんき",
+    "modifier": 1.2,
+    "timing": "attackMod",
+    "judgment_type": "でんき",
+    "fling_power": 90,
+    "description": "でんきタイプの技の威力が1.2倍になり、さばきのつぶてがでんきタイプになる"
+  },
+  {
+    "name": "みどりのプレート",
+    "type": "くさ",
+    "modifier": 1.2,
+    "timing": "attackMod",
+    "judgment_type": "くさ",
+    "fling_power": 90,
+    "description": "くさタイプの技の威力が1.2倍になり、さばきのつぶてがくさタイプになる"
+  },
+  {
+    "name": "つららのプレート",
+    "type": "こおり",
+    "modifier": 1.2,
+    "timing": "attackMod",
+    "judgment_type": "こおり",
+    "fling_power": 90,
+    "description": "こおりタイプの技の威力が1.2倍になり、さばきのつぶてがこおりタイプになる"
+  },
+  {
+    "name": "こぶしのプレート",
+    "type": "かくとう",
+    "modifier": 1.2,
+    "timing": "attackMod",
+    "judgment_type": "かくとう",
+    "fling_power": 90,
+    "description": "かくとうタイプの技の威力が1.2倍になり、さばきのつぶてがかくとうタイプになる"
+  },
+  {
+    "name": "もうどくプレート",
+    "type": "どく",
+    "modifier": 1.2,
+    "timing": "attackMod",
+    "judgment_type": "どく",
+    "fling_power": 90,
+    "description": "どくタイプの技の威力が1.2倍になり、さばきのつぶてがどくタイプになる"
+  },
+  {
+    "name": "だいちのプレート",
+    "type": "じめん",
+    "modifier": 1.2,
+    "timing": "attackMod",
+    "judgment_type": "じめん",
+    "fling_power": 90,
+    "description": "じめんタイプの技の威力が1.2倍になり、さばきのつぶてがじめんタイプになる"
+  },
+  {
+    "name": "あおぞらプレート",
+    "type": "ひこう",
+    "modifier": 1.2,
+    "timing": "attackMod",
+    "judgment_type": "ひこう",
+    "fling_power": 90,
+    "description": "ひこうタイプの技の威力が1.2倍になり、さばきのつぶてがひこうタイプになる"
+  },
+  {
+    "name": "ふしぎのプレート",
+    "type": "エスパー",
+    "modifier": 1.2,
+    "timing": "attackMod",
+    "judgment_type": "エスパー",
+    "fling_power": 90,
+    "description": "エスパータイプの技の威力が1.2倍になり、さばきのつぶてがエスパータイプになる"
+  },
+  {
+    "name": "たまむしプレート",
+    "type": "むし",
+    "modifier": 1.2,
+    "timing": "attackMod",
+    "judgment_type": "むし",
+    "fling_power": 90,
+    "description": "むしタイプの技の威力が1.2倍になり、さばきのつぶてがむしタイプになる"
+  },
+  {
+    "name": "がんせきプレート",
+    "type": "いわ",
+    "modifier": 1.2,
+    "timing": "attackMod",
+    "judgment_type": "いわ",
+    "fling_power": 90,
+    "description": "いわタイプの技の威力が1.2倍になり、さばきのつぶてがいわタイプになる"
+  },
+  {
+    "name": "もののけプレート",
+    "type": "ゴースト",
+    "modifier": 1.2,
+    "timing": "attackMod",
+    "judgment_type": "ゴースト",
+    "fling_power": 90,
+    "description": "ゴーストタイプの技の威力が1.2倍になり、さばきのつぶてがゴーストタイプになる"
+  },
+  {
+    "name": "りゅうのプレート",
+    "type": "ドラゴン",
+    "modifier": 1.2,
+    "timing": "attackMod",
+    "judgment_type": "ドラゴン",
+    "fling_power": 90,
+    "description": "ドラゴンタイプの技の威力が1.2倍になり、さばきのつぶてがドラゴンタイプになる"
+  },
+  {
+    "name": "こわもてプレート",
+    "type": "あく",
+    "modifier": 1.2,
+    "timing": "attackMod",
+    "judgment_type": "あく",
+    "fling_power": 90,
+    "description": "あくタイプの技の威力が1.2倍になり、さばきのつぶてがあくタイプになる"
+  },
+  {
+    "name": "こうてつプレート",
+    "type": "はがね",
+    "modifier": 1.2,
+    "timing": "attackMod",
+    "judgment_type": "はがね",
+    "fling_power": 90,
+    "description": "はがねタイプの技の威力が1.2倍になり、さばきのつぶてがはがねタイプになる"
+  },
+  {
+    "name": "クラボのみ",
+    "natural_gift_type": "ほのお",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: ほのお 威力60"
+  },
+  {
+    "name": "カゴのみ",
+    "natural_gift_type": "みず",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: みず 威力60"
+  },
+  {
+    "name": "モモンのみ",
+    "natural_gift_type": "でんき",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: でんき 威力60"
+  },
+  {
+    "name": "チーゴのみ",
+    "natural_gift_type": "くさ",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: くさ 威力60"
+  },
+  {
+    "name": "ナナシのみ",
+    "natural_gift_type": "こおり",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: こおり 威力60"
+  },
+  {
+    "name": "ヒメリのみ",
+    "natural_gift_type": "かくとう",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: かくとう 威力60"
+  },
+  {
+    "name": "オレンのみ",
+    "natural_gift_type": "どく",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: どく 威力60"
+  },
+  {
+    "name": "キーのみ",
+    "natural_gift_type": "じめん",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: じめん 威力60"
+  },
+  {
+    "name": "ラムのみ",
+    "natural_gift_type": "ひこう",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: ひこう 威力60"
+  },
+  {
+    "name": "オボンのみ",
+    "natural_gift_type": "エスパー",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: エスパー 威力60",
+    "romaji": "obonnnomi"
+  },
+  {
+    "name": "フィラのみ",
+    "natural_gift_type": "むし",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: むし 威力60",
+    "romaji": "firanomi"
+  },
+  {
+    "name": "ウイのみ",
+    "natural_gift_type": "いわ",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: いわ 威力60",
+    "romaji": "uinomi"
+  },
+  {
+    "name": "マゴのみ",
+    "natural_gift_type": "ゴースト",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: ゴースト 威力60",
+    "romaji": "magonomi"
+  },
+  {
+    "name": "バンジのみ",
+    "natural_gift_type": "ドラゴン",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: ドラゴン 威力60",
+    "romaji": "banzinomi"
+  },
+  {
+    "name": "イアのみ",
+    "natural_gift_type": "あく",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: あく 威力60",
+    "romaji": "ianomi"
+  },
+  {
+    "name": "ズリのみ",
+    "natural_gift_type": "はがね",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: はがね 威力60"
+  },
+  {
+    "name": "ブリーのみ",
+    "natural_gift_type": "ほのお",
+    "natural_gift_power": 70,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: ほのお 威力70"
+  },
+  {
+    "name": "ナナのみ",
+    "natural_gift_type": "みず",
+    "natural_gift_power": 70,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: みず 威力70"
+  },
+  {
+    "name": "セシナのみ",
+    "natural_gift_type": "でんき",
+    "natural_gift_power": 70,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: でんき 威力70"
+  },
+  {
+    "name": "パイルのみ",
+    "natural_gift_type": "くさ",
+    "natural_gift_power": 70,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: くさ 威力70"
+  },
+  {
+    "name": "ザロクのみ",
+    "natural_gift_type": "こおり",
+    "natural_gift_power": 70,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: こおり 威力70"
+  },
+  {
+    "name": "ネコブのみ",
+    "natural_gift_type": "かくとう",
+    "natural_gift_power": 70,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: かくとう 威力70"
+  },
+  {
+    "name": "タポルのみ",
+    "natural_gift_type": "どく",
+    "natural_gift_power": 70,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: どく 威力70"
+  },
+  {
+    "name": "ロメのみ",
+    "natural_gift_type": "じめん",
+    "natural_gift_power": 70,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: じめん 威力70"
+  },
+  {
+    "name": "ウブのみ",
+    "natural_gift_type": "ひこう",
+    "natural_gift_power": 70,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: ひこう 威力70"
+  },
+  {
+    "name": "マトマのみ",
+    "natural_gift_type": "エスパー",
+    "natural_gift_power": 70,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: エスパー 威力70"
+  },
+  {
+    "name": "モコシのみ",
+    "natural_gift_type": "むし",
+    "natural_gift_power": 70,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: むし 威力70"
+  },
+  {
+    "name": "ゴスのみ",
+    "natural_gift_type": "いわ",
+    "natural_gift_power": 70,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: いわ 威力70"
+  },
+  {
+    "name": "ラブタのみ",
+    "natural_gift_type": "ゴースト",
+    "natural_gift_power": 70,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: ゴースト 威力70"
+  },
+  {
+    "name": "ノメルのみ",
+    "natural_gift_type": "ドラゴン",
+    "natural_gift_power": 70,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: ドラゴン 威力70"
+  },
+  {
+    "name": "ノワキのみ",
+    "natural_gift_type": "あく",
+    "natural_gift_power": 70,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: あく 威力70"
+  },
+  {
+    "name": "シーヤのみ",
+    "natural_gift_type": "はがね",
+    "natural_gift_power": 70,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: はがね 威力70"
+  },
+  {
+    "name": "カイスのみ",
+    "natural_gift_type": "ほのお",
+    "natural_gift_power": 80,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: ほのお 威力80"
+  },
+  {
+    "name": "ドリのみ",
+    "natural_gift_type": "みず",
+    "natural_gift_power": 80,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: みず 威力80"
+  },
+  {
+    "name": "ベリブのみ",
+    "natural_gift_type": "でんき",
+    "natural_gift_power": 80,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: でんき 威力80"
+  },
+  {
+    "name": "オッカのみ",
+    "natural_gift_type": "ほのお",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: ほのお 威力60"
+  },
+  {
+    "name": "イトケのみ",
+    "natural_gift_type": "みず",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: みず 威力60"
+  },
+  {
+    "name": "ソクノのみ",
+    "natural_gift_type": "でんき",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: でんき 威力60"
+  },
+  {
+    "name": "リンドのみ",
+    "natural_gift_type": "くさ",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: くさ 威力60"
+  },
+  {
+    "name": "ヤチェのみ",
+    "natural_gift_type": "こおり",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: こおり 威力60"
+  },
+  {
+    "name": "ヨプのみ",
+    "natural_gift_type": "かくとう",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: かくとう 威力60"
+  },
+  {
+    "name": "ビアーのみ",
+    "natural_gift_type": "どく",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: どく 威力60"
+  },
+  {
+    "name": "シュカのみ",
+    "natural_gift_type": "じめん",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: じめん 威力60"
+  },
+  {
+    "name": "バコウのみ",
+    "natural_gift_type": "ひこう",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: ひこう 威力60"
+  },
+  {
+    "name": "ウタンのみ",
+    "natural_gift_type": "エスパー",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: エスパー 威力60"
+  },
+  {
+    "name": "タンガのみ",
+    "natural_gift_type": "むし",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: むし 威力60"
+  },
+  {
+    "name": "ヨロギのみ",
+    "natural_gift_type": "いわ",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: いわ 威力60"
+  },
+  {
+    "name": "カシブのみ",
+    "natural_gift_type": "ゴースト",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: ゴースト 威力60"
+  },
+  {
+    "name": "ハバンのみ",
+    "natural_gift_type": "ドラゴン",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: ドラゴン 威力60"
+  },
+  {
+    "name": "ナモのみ",
+    "natural_gift_type": "あく",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: あく 威力60"
+  },
+  {
+    "name": "リリバのみ",
+    "natural_gift_type": "はがね",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: はがね 威力60"
+  },
+  {
+    "name": "ホズのみ",
+    "natural_gift_type": "ノーマル",
+    "natural_gift_power": 60,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: ノーマル 威力60"
+  },
+  {
+    "name": "チイラのみ",
+    "natural_gift_type": "くさ",
+    "natural_gift_power": 80,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: くさ 威力80"
+  },
+  {
+    "name": "リュガのみ",
+    "natural_gift_type": "こおり",
+    "natural_gift_power": 80,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: こおり 威力80"
+  },
+  {
+    "name": "カムラのみ",
+    "natural_gift_type": "かくとう",
+    "natural_gift_power": 80,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: かくとう 威力80"
+  },
+  {
+    "name": "ヤタピのみ",
+    "natural_gift_type": "どく",
+    "natural_gift_power": 80,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: どく 威力80"
+  },
+  {
+    "name": "ズアのみ",
+    "natural_gift_type": "じめん",
+    "natural_gift_power": 80,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: じめん 威力80"
+  },
+  {
+    "name": "サンのみ",
+    "natural_gift_type": "ひこう",
+    "natural_gift_power": 80,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: ひこう 威力80"
+  },
+  {
+    "name": "スターのみ",
+    "natural_gift_type": "エスパー",
+    "natural_gift_power": 80,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: エスパー 威力80"
+  },
+  {
+    "name": "ナゾのみ",
+    "natural_gift_type": "むし",
+    "natural_gift_power": 80,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: むし 威力80"
+  },
+  {
+    "name": "ミクルのみ",
+    "natural_gift_type": "いわ",
+    "natural_gift_power": 80,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: いわ 威力80"
+  },
+  {
+    "name": "イバンのみ",
+    "natural_gift_type": "ゴースト",
+    "natural_gift_power": 80,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: ゴースト 威力80"
+  },
+  {
+    "name": "ジャポのみ",
+    "natural_gift_type": "ドラゴン",
+    "natural_gift_power": 80,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: ドラゴン 威力80"
+  },
+  {
+    "name": "レンブのみ",
+    "natural_gift_type": "あく",
+    "natural_gift_power": 80,
+    "fling_power": 10,
+    "description": "しぜんのめぐみ: あく 威力80"
   }
 ]

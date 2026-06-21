@@ -82,44 +82,86 @@ document.addEventListener('DOMContentLoaded', function() {
 // クリップボードコピー機能
 // ========================
 
-// 持ち物がダメージ計算に影響するかを判定
-function isItemEffectiveForMove(item, move) {
-    if (!item || !move) return false;
+function getItemTypes(item) {
+    if (!item) return [];
+    if (Array.isArray(item.types)) return item.types;
+    return item.type ? [item.type] : [];
+}
 
-    const isPhysical = move.category === 'Physical';
-    const isSpecial = move.category === 'Special';
-    const pokemonName = attackerPokemon.name;
+function isItemTypeMatch(item, moveType) {
+    return getItemTypes(item).includes(moveType);
+}
 
-    // ポケモン専用アイテムの専用チェック
+function isExclusiveItemValid(item, pokemonName) {
+    if (!item) return false;
+
     const exclusiveItems = {
         'でんきだま': ['ピカチュウ'],
         'こころのしずく': ['ラティオス', 'ラティアス'],
         'しんかいのウロコ': ['パールル'],
         'しんかいのキバ': ['パールル'],
         'メタルパウダー': ['メタモン'],
-        'ふといホネ': ['カラカラ', 'ガラガラ']
+        'ふといホネ': ['カラカラ', 'ガラガラ'],
+        'こんごうだま': ['ディアルガ'],
+        'しらたま': ['パルキア'],
+        'はっきんだま': ['ギラティナ']
     };
 
-    // 専用アイテムの場合、該当ポケモン以外は効果なし
-    if (exclusiveItems[item.name]) {
-        if (!exclusiveItems[item.name].includes(pokemonName)) {
-            return false;
-        }
+    const itemUsers = item.exclusive_pokemon || exclusiveItems[item.name];
+    return !itemUsers || itemUsers.includes(pokemonName);
+}
+
+function getTypeEffectivenessMultiplier(moveType, defenderTypes) {
+    if (!defenderTypes.length || !typeMultiplierData[moveType]) {
+        return 1;
     }
 
-    // 攻撃力補正系アイテム
+    return defenderTypes.reduce((multiplier, defType) => {
+        const typeMultiplier = typeMultiplierData[moveType][defType];
+        return typeMultiplier === undefined ? multiplier : multiplier * typeMultiplier;
+    }, 1);
+}
+
+function isSuperEffectiveMove(moveType, defenderTypes) {
+    return getTypeEffectivenessMultiplier(moveType, defenderTypes) > 1;
+}
+
+function isSelectableAttackerItem(item) {
+    if (!item) return false;
+    return item.timing === 'attackMod' ||
+           item.timing === 'powerMod' ||
+           item.fling_power ||
+           item.natural_gift_power ||
+           item.judgment_type;
+}
+
+function isSelectableDefenderItem(item) {
+    if (!item) return false;
+    return item.timing !== 'attackMod' &&
+           item.timing !== 'powerMod' &&
+           !item.judgment_type;
+}
+
+// 持ち物がダメージ計算に影響するかを判定
+function isItemEffectiveForMove(item, move) {
+    if (!item || !move) return false;
+    if (!isExclusiveItemValid(item, attackerPokemon.name)) return false;
+
+    if (move.class === 'fling' && item.fling_power) return true;
+    if (move.class === 'natural_gift' && item.natural_gift_power) return true;
+    if (move.class === 'judgment' && item.judgment_type) return true;
+
     if (item.timing === "attackMod") {
-        if (isPhysical && item.a && item.a !== 1.0) return true;
-        if (isSpecial && item.c && item.c !== 1.0) return true;
+        if (isItemTypeMatch(item, move.type)) return true;
+        if (move.category === 'Physical' && item.a && item.a !== 1.0) return true;
+        if (move.category === 'Special' && item.c && item.c !== 1.0) return true;
     }
 
-    // タイプ一致補正系アイテム
-    if (item.timing === "typeMod" && item.type === move.type) {
-        return true;
-    }
-
-    // 威力補正系アイテム（特定技への補正）
     if (item.timing === "powerMod") {
+        if (item.category && item.category !== move.category) return false;
+        if (item.condition === "super_effective") {
+            return isSuperEffectiveMove(move.type, defenderPokemon.types);
+        }
         return true;
     }
 
@@ -530,7 +572,7 @@ function restoreSpecialSettings() {
     // 天候設定
     const weatherSelect = document.getElementById('weatherSelect');
     if (weatherSelect && weatherSelect.value) {
-        updateWeatherBallIfNeeded();
+        updateAllDynamicMoveData();
         updateCastformTypeIfNeeded();
     }
 
@@ -550,12 +592,16 @@ function restoreAbilityCheckboxes() {
         'yogaPowerCheck', 'hugePowerCheck', 'harikiriCheck',
         'plusCheck', 'minusCheck', 'gutsCheck',
         'shinryokuCheck', 'moukaCheck', 'gekiryuuCheck',
-        'mushiNoShiraseCheck', 'moraibiCheck'
+        'mushiNoShiraseCheck', 'moraibiCheck',
+        'adaptabilityCheck', 'recklessCheck', 'technicianCheck',
+        'sniperCheck', 'sunPowerCheck', 'ironFistCheck',
+        'slowStartCheck', 'normalizeCheck', 'tintedLensCheck'
     ];
 
     // 防御側特性
     const defenderAbilities = [
-        'atsuishibouCheck', 'fushiginaurokoCheck'
+        'atsuishibouCheck', 'fushiginaurokoCheck',
+        'filterCheck', 'solidRockCheck', 'heatproofCheck', 'drySkinCheck'
     ];
 
     [...attackerAbilities, ...defenderAbilities].forEach(abilityId => {
@@ -788,8 +834,8 @@ function setupEventListeners() {
 
     // 天候変更時
     document.getElementById('weatherSelect').addEventListener('change', function() {
-    updateWeatherBallIfNeeded();
-    updateCastformTypeIfNeeded();
+        updateAllDynamicMoveData();
+        updateCastformTypeIfNeeded();
     });
 
     // まひ・こんらん変更時
@@ -1385,6 +1431,7 @@ function selectMoveForTurn(moveName, turn) {
 
     // 複数ターン技の配列に保存
     multiTurnMoves[turn] = moveData_found;
+    updateMoveDynamicTypeAndCategory(multiTurnMoves[turn]);
 
     //console.log(`${turn + 1}ターン目に技を設定: ${moveName} (class: ${moveData_found.class})`);
 
@@ -1578,10 +1625,9 @@ function showItemList(dropdown, input, side) {
     // サイドによってフィルタリング
     const filteredItems = itemData.filter(item => {
         if (side === 'attacker') {
-            return item.timing === 'attackMod';
-        } else {
-            return item.timing !== 'attackMod';
+            return isSelectableAttackerItem(item);
         }
+        return isSelectableDefenderItem(item);
     });
 
     filteredItems.forEach(item => {
@@ -1625,8 +1671,8 @@ function filterItemList(searchText, dropdown, input, side) {
     // サイドによってフィルタリング
     const filtered = itemData.filter(item => {
         // まずタイミングでフィルタ
-        if (side === 'attacker' && item.timing !== 'attackMod') return false;
-        if (side === 'defender' && item.timing === 'attackMod') return false;
+        if (side === 'attacker' && !isSelectableAttackerItem(item)) return false;
+        if (side === 'defender' && !isSelectableDefenderItem(item)) return false;
 
         // 次に検索文字でフィルタ
         const name = item.name ? item.name.toLowerCase() : '';
@@ -2032,6 +2078,8 @@ function selectPokemon(side, pokemonName) {
     // ポワルンの場合は天候に応じてタイプを設定、それ以外は通常のタイプ
     if (pokemonName === 'ポワルン') {
         target.types = getCastformTypeByWeather();
+    } else if (pokemonName === 'アルセウス') {
+        target.types = [getArceusTypeByItem(target.item)];
     } else {
         target.types = Array.isArray(pokemon.type) ? pokemon.type : [pokemon.type];
     }
@@ -2408,7 +2456,7 @@ function getWeatherBallTypeAndCategory() {
         case 'rain':
             return { type: 'みず', category: 'Special' };
         case 'sandstorm':
-            return { type: 'いわ', category: 'Physical' };
+            return { type: 'いわ', category: 'Special' };
         case 'hail':
             return { type: 'こおり', category: 'Special' };
         default:
@@ -2431,6 +2479,43 @@ function updateWeatherBallIfNeeded() {
             multiTurnMoves[i].type = weatherData.type;
             multiTurnMoves[i].category = weatherData.category;
         }
+    }
+}
+
+function getNaturalGiftType() {
+    const item = attackerPokemon.item;
+    return item?.natural_gift_type || 'ノーマル';
+}
+
+function getJudgmentType() {
+    const item = attackerPokemon.item;
+    return item?.judgment_type || 'ノーマル';
+}
+
+function updateMoveDynamicTypeAndCategory(move) {
+    if (!move) return;
+
+    if (move.class === 'awaken_power') {
+        move.type = calculateHiddenPowerType();
+        move.category = getGen4HiddenPowerCategory();
+        move.power = calculateHiddenPowerBP();
+    } else if (move.class === 'weather_ball') {
+        const weatherData = getWeatherBallTypeAndCategory();
+        move.type = weatherData.type;
+        move.category = weatherData.category;
+    } else if (move.class === 'natural_gift') {
+        move.type = getNaturalGiftType();
+        move.category = 'Physical';
+    } else if (move.class === 'judgment') {
+        move.type = getJudgmentType();
+        move.category = 'Special';
+    }
+}
+
+function updateAllDynamicMoveData() {
+    updateMoveDynamicTypeAndCategory(currentMove);
+    for (let i = 0; i < multiTurnMoves.length; i++) {
+        updateMoveDynamicTypeAndCategory(multiTurnMoves[i]);
     }
 }
 // ポワルンの天候による形態変化を取得する
@@ -2468,20 +2553,6 @@ function updateCastformTypeIfNeeded() {
 
 // 技選択
 function selectMove(moveName) {
-
-    // めざめるパワーの場合、タイプと分類を動的に更新
-    if (currentMove && currentMove.class === 'awaken_power') {
-        const newType = calculateHiddenPowerType();
-        currentMove.type = newType;
-        currentMove.category = getGen3CategoryByType(newType);
-    }
-    // ウェザーボールの場合、天候に応じてタイプと分類を更新
-    if (currentMove && currentMove.class === 'weather_ball') {
-        const weatherData = getWeatherBallTypeAndCategory();
-        currentMove.type = weatherData.type;
-        currentMove.category = weatherData.category;
-    }
-
     // 全ての特殊設定を一旦非表示に
     const multiHitContainer = document.getElementById('multiHitContainer');
     const pinchUpContainer = document.querySelector('.pinchUpContainer');
@@ -2494,6 +2565,8 @@ function selectMove(moveName) {
     if (twofoldContainer) twofoldContainer.style.display = 'none';
 
     currentMove = moveData.find(m => m.name === moveName);
+    if (!currentMove) return;
+    updateMoveDynamicTypeAndCategory(currentMove);
 
     // 技のクラスに応じて表示
     switch (currentMove.class) {
@@ -2808,7 +2881,7 @@ function selectMultiTurnMove(turn, moveName) {
             multiTurnMoves[turn] = {
                 ...move,
                 type: newType,
-                category: getGen3CategoryByType(newType)
+                category: getGen4HiddenPowerCategory()
             };
         }
         // ウェザーボールの場合、天候に応じてタイプと分類を更新
@@ -2846,7 +2919,7 @@ function updateAbilityCheckboxes(side, abilities) {
         showAndCheckAbility('harikiriContainer', 'harikiriCheck');
         break;
       case 'プラス':
-        showAndCheckAbility('plusContainer', 'plusheck');
+        showAndCheckAbility('plusContainer', 'plusCheck');
         break;
       case 'マイナス':
         showAndCheckAbility('minusContainer', 'minusCheck');
@@ -2869,6 +2942,33 @@ function updateAbilityCheckboxes(side, abilities) {
       case 'もらいび':
         showAndCheckAbility('moraibiContainer', 'moraibiCheck');
         break;
+      case 'てきおうりょく':
+        showAndCheckAbility('adaptabilityContainer', 'adaptabilityCheck');
+        break;
+      case 'すてみ':
+        showAndCheckAbility('recklessContainer', 'recklessCheck');
+        break;
+      case 'テクニシャン':
+        showAndCheckAbility('technicianContainer', 'technicianCheck');
+        break;
+      case 'スナイパー':
+        showAndCheckAbility('sniperContainer', 'sniperCheck');
+        break;
+      case 'サンパワー':
+        showAndCheckAbility('sunPowerContainer', 'sunPowerCheck');
+        break;
+      case 'てつのこぶし':
+        showAndCheckAbility('ironFistContainer', 'ironFistCheck');
+        break;
+      case 'スロースタート':
+        showAndCheckAbility('slowStartContainer', 'slowStartCheck');
+        break;
+      case 'ノーマルスキン':
+        showAndCheckAbility('normalizeContainer', 'normalizeCheck');
+        break;
+      case 'いろめがね':
+        showAndCheckAbility('tintedLensContainer', 'tintedLensCheck');
+        break;
     }
   });
 }
@@ -2890,7 +2990,9 @@ function hideAllAbilityCheckboxes(side) {
     'yogaPowerContainer', 'hugePowerContainer','harikiriContainer',
     'plusContainer', 'minusContainer', 'gutsContainer',
     'shinryokuContainer', 'moukaContainer', 'gekiryuuContainer', 'mushiNoShiraseContainer',
-    'moraibiContainer'
+    'moraibiContainer', 'adaptabilityContainer', 'recklessContainer', 'technicianContainer',
+    'sniperContainer', 'sunPowerContainer', 'ironFistContainer', 'slowStartContainer',
+    'normalizeContainer', 'tintedLensContainer'
   ];
 
   abilityContainers.forEach(id => {
@@ -2907,7 +3009,10 @@ function hideAllAbilityCheckboxes(side) {
 
 function hideAllDefenderAbilityCheckboxes() {
     document.querySelector('.defenderAbilityContainer').style.display = 'none';
-    const defenderAbilities = ['atsuishibouContainer', 'fushiginaurokoContainer'];
+    const defenderAbilities = [
+        'atsuishibouContainer', 'fushiginaurokoContainer',
+        'filterContainer', 'solidRockContainer', 'heatproofContainer', 'drySkinContainer'
+    ];
     defenderAbilities.forEach(id => {
         const container = document.getElementById(id);
         if (container) {
@@ -2941,6 +3046,30 @@ function updateDefenderAbilityCheckboxes(abilities) {
             if (container) {
                 container.style.display = 'inline-block';
             }
+        } else if (ability === 'フィルター') {
+            hasDefenderAbility = true;
+            const container = document.getElementById('filterContainer');
+            if (container) {
+                container.style.display = 'inline-block';
+            }
+        } else if (ability === 'ハードロック') {
+            hasDefenderAbility = true;
+            const container = document.getElementById('solidRockContainer');
+            if (container) {
+                container.style.display = 'inline-block';
+            }
+        } else if (ability === 'たいねつ') {
+            hasDefenderAbility = true;
+            const container = document.getElementById('heatproofContainer');
+            if (container) {
+                container.style.display = 'inline-block';
+            }
+        } else if (ability === 'かんそうはだ') {
+            hasDefenderAbility = true;
+            const container = document.getElementById('drySkinContainer');
+            if (container) {
+                container.style.display = 'inline-block';
+            }
         }
     });
 
@@ -2954,8 +3083,11 @@ function selectItem(side, itemName) {
     const item = itemName ? itemData.find(i => i.name === itemName) : null;
     if (side === 'attacker') {
         attackerPokemon.item = item;
+        updateArceusTypeIfNeeded();
+        updateAllDynamicMoveData();
     } else {
         defenderPokemon.item = item;
+        updateArceusTypeIfNeeded();
     }
 }
 
@@ -5180,6 +5312,19 @@ function clearRealStatInputLimits(side) {
 
 // 威力計算
 function calculatePower(move) {
+    if (!move) return 0;
+
+    if (move.class === 'two_fold') {
+        const basePower = move.power || 0;
+        return isChecked('twofoldCheck') ? basePower * 2 : basePower;
+    }
+
+    if (move.class === 'weather_ball') {
+        const basePower = move.power || 0;
+        const weather = document.getElementById('weatherSelect')?.value || 'none';
+        return weather !== 'none' ? basePower * 2 : basePower;
+    }
+
     // きしかいせい・じたばた
     if (move.class === 'pinch_up') {
         const currentHP = parseInt(document.getElementById('pinchUp_currentHP')?.value) || 1;
@@ -5204,6 +5349,18 @@ function calculatePower(move) {
     else if (move.class === 'awaken_power'){
         return calculateHiddenPowerBP();
     }
+    else if (move.class === 'gyro_ball') {
+        return calculateGyroBallPower();
+    }
+    else if (move.class === 'target_hp_rate') {
+        return calculateTargetHpRatePower();
+    }
+    else if (move.class === 'fling') {
+        return calculateHeldItemPower('fling_power', move.power || 0);
+    }
+    else if (move.class === 'natural_gift') {
+        return calculateHeldItemPower('natural_gift_power', 0);
+    }
     // けたぐり・くさむすび・じゅうりょくは
     else if (move.class === 'weight_based') {
         const defenderWeight = getDefenderWeight();
@@ -5217,6 +5374,41 @@ function calculatePower(move) {
     }
 
     return move.power || 0;
+}
+
+function calculateGyroBallPower() {
+    const attackerStats = calculateStats(attackerPokemon);
+    const defenderStats = calculateStats(defenderPokemon);
+    const attackerSpeed = Math.max(1, attackerStats.s || 1);
+    const defenderSpeed = Math.max(1, defenderStats.s || 1);
+
+    return Math.min(150, Math.floor(25 * defenderSpeed / attackerSpeed) + 1);
+}
+
+function calculateTargetHpRatePower() {
+    const maxHP = getDefenderMaxHP();
+    const currentHP = Math.min(getDefenderCurrentHP(maxHP), maxHP);
+
+    return Math.max(1, Math.floor(120 * currentHP / maxHP) + 1);
+}
+
+function getDefenderMaxHP() {
+    const mainValue = parseInt(document.getElementById('defenderRealHP')?.value);
+    const detailValue = parseInt(document.getElementById('defenderDetailRealHP')?.value);
+    const calculated = calculateStats(defenderPokemon).hp;
+
+    return Math.max(1, mainValue || detailValue || calculated || 1);
+}
+
+function getDefenderCurrentHP(maxHP = getDefenderMaxHP()) {
+    const currentValue = parseInt(document.getElementById('defenderCurrentHP')?.value);
+    return Math.max(1, currentValue || maxHP);
+}
+
+function calculateHeldItemPower(fieldName, fallbackPower) {
+    const item = attackerPokemon.item;
+    const itemPower = item && Number(item[fieldName]);
+    return itemPower > 0 ? itemPower : fallbackPower;
 }
 
 // 防御側ポケモンの重さを取得する関数
@@ -5308,22 +5500,14 @@ function calculateHiddenPowerType() {
     return typeTable[typeIndex];
 }
 
-// 3世代のタイプから物理/特殊を判定
-function getGen3CategoryByType(type) {
-    // 物理タイプ
-    const physicalTypes = ['ノーマル', 'かくとう', 'どく', 'じめん', 'ひこう', 'むし', 'いわ', 'ゴースト', 'はがね'];
+// 4世代のめざめるパワーはタイプに関係なく特殊技
+function getGen4HiddenPowerCategory() {
+    return 'Special';
+}
 
-    // 特殊タイプ
-    const specialTypes = ['ほのお', 'みず', 'でんき', 'くさ', 'こおり', 'エスパー', 'ドラゴン', 'あく'];
-
-    if (physicalTypes.includes(type)) {
-        return 'Physical';
-    } else if (specialTypes.includes(type)) {
-        return 'Special';
-    } else {
-        // デフォルトは特殊
-        return 'Special';
-    }
+// target 2: opponents, target 3: all Pokemon except the user.
+function isSpreadMove(move) {
+    return move && (move.target === 2 || move.target === 3);
 }
 
 // めざめるパワーのタイプ更新が必要かチェック
@@ -5335,7 +5519,7 @@ function updateHiddenPowerIfNeeded() {
         const newPower = calculateHiddenPowerBP();
 
         currentMove.type = newType;
-        currentMove.category = getGen3CategoryByType(newType);
+        currentMove.category = getGen4HiddenPowerCategory();
         currentMove.power = newPower;
     }
 
@@ -5346,7 +5530,7 @@ function updateHiddenPowerIfNeeded() {
             const newPower = calculateHiddenPowerBP();
 
             multiTurnMoves[i].type = newType;
-            multiTurnMoves[i].category = getGen3CategoryByType(newType);
+            multiTurnMoves[i].category = getGen4HiddenPowerCategory();
             multiTurnMoves[i].power = newPower;  // ← この行を追加
         }
     }
@@ -5575,6 +5759,40 @@ function hasDefenderAbility(abilityName, checkboxId = null) {
     return getPokemonAbilities(defenderPokemon).includes(abilityName);
 }
 
+const recklessMoveNames = new Set([
+    'すてみタックル', 'とっしん', 'じごくぐるま', 'とびげり', 'とびひざげり',
+    'ボルテッカー', 'フレアドライブ', 'ブレイブバード', 'ウッドハンマー', 'もろはのずつき'
+]);
+
+const ironFistMoveNames = new Set([
+    'れんぞくパンチ', 'メガトンパンチ', 'ほのおのパンチ', 'れいとうパンチ',
+    'かみなりパンチ', 'ピヨピヨパンチ', 'マッハパンチ', 'ばくれつパンチ',
+    'きあいパンチ', 'コメットパンチ', 'シャドーパンチ', 'アームハンマー',
+    'バレットパンチ', 'ドレインパンチ'
+]);
+
+function isRecklessMove(move) {
+    return move && recklessMoveNames.has(move.name);
+}
+
+function isIronFistMove(move) {
+    return move && ironFistMoveNames.has(move.name);
+}
+
+function getArceusTypeByItem(item) {
+    return item?.judgment_type || 'ノーマル';
+}
+
+function updateArceusTypeIfNeeded() {
+    if (attackerPokemon.name === 'アルセウス') {
+        attackerPokemon.types = [getArceusTypeByItem(attackerPokemon.item)];
+    }
+
+    if (defenderPokemon.name === 'アルセウス') {
+        defenderPokemon.types = [getArceusTypeByItem(defenderPokemon.item)];
+    }
+}
+
 function getTypeEffectivenessRollDamage(damage, moveType, defenderTypes) {
     if (!defenderTypes.length || !typeMultiplierData[moveType]) {
         return damage;
@@ -5637,29 +5855,21 @@ function calculateDamage(attack, defense, level, power, category, moveType, atta
   let finalDefense = defense;
   let finalPower = power;
   const isCritical = isChecked('criticalCheck');
+  const weather = document.getElementById('weatherSelect').value;
 
-
-  // きしかいせい・じたばた
-  if (currentMove && currentMove.class === "pinch_up"){
-    const currentHP = parseInt(document.getElementById('pinchUp_currentHP').value) || 1;
-    const maxHP = parseInt(document.getElementById('pinchUp_maxHP').value) || 1;
-    const HPrate = Math.floor(currentHP * 48 / maxHP);
-
-    if (HPrate >= 33) {
-      finalPower = 20;
-    } else if (HPrate >= 17) {
-      finalPower = 40;
-    } else if (HPrate >= 10) {
-      finalPower = 80;
-    } else if (HPrate >= 5) {
-      finalPower = 100;
-    } else if (HPrate >= 2) {
-      finalPower = 150;
-    } else {
-      finalPower = 200;
-    }
+  if (currentMove && (currentMove.class === 'fling' || currentMove.class === 'natural_gift') && finalPower <= 0) {
+      return makeDamageResultFromRolls(Array(16).fill(0));
   }
 
+  if (hasAttackerAbility('ノーマルスキン', 'normalizeCheck')) {
+      moveType = 'ノーマル';
+  }
+
+  if (hasDefenderAbility('かんそうはだ', 'drySkinCheck') && moveType === 'みず') {
+      return makeDamageResultFromRolls(Array(16).fill(0));
+  }
+
+  // きしかいせい・じたばた
   // じゅうでん中は雷属性の威力を2倍
   if (isChecked('chargingCheck') && moveType === 'でんき') {
       finalPower = Math.floor(finalPower * 2);
@@ -5683,28 +5893,18 @@ function calculateDamage(attack, defense, level, power, category, moveType, atta
   if (attackerPokemon.item) {
       const item = attackerPokemon.item;
 
-      // ポケモン専用アイテムの専用チェック
-      const exclusiveItems = {
-          'でんきだま': ['ピカチュウ'],
-          'こころのしずく': ['ラティオス', 'ラティアス'],
-          'しんかいのウロコ': ['パールル'],
-          'しんかいのキバ': ['パールル'],
-          'メタルパウダー': ['メタモン'],
-          'ふといホネ': ['カラカラ', 'ガラガラ']
-      };
-
-      // 専用アイテムの場合、該当ポケモン以外は効果なし
-      let isItemValid = true;
-      if (exclusiveItems[item.name]) {
-          isItemValid = exclusiveItems[item.name].includes(attackerPokemon.name);
-      }
-
-      if (isItemValid && item.timing === "attackMod" && item.type && item.type === moveType) {
-          const modifier = item.a || item.c || 1.0;
+      if (isExclusiveItemValid(item, attackerPokemon.name) && item.timing === "attackMod" && isItemTypeMatch(item, moveType)) {
+          const modifier = item.modifier || item.a || item.c || 1.0;
           finalPower = Math.floor(finalPower * modifier);
-      } else if (isItemValid && item.timing === "attackMod") {
+      } else if (isExclusiveItemValid(item, attackerPokemon.name) && item.timing === "attackMod") {
           const modifier = category === "Physical" ? (item.a || 1.0) : (item.c || 1.0);
           finalAttack = Math.floor(finalAttack * modifier);
+      } else if (isExclusiveItemValid(item, attackerPokemon.name) && item.timing === "powerMod") {
+          const categoryMatches = !item.category || item.category === category;
+          const conditionMatches = item.condition !== "super_effective" || isSuperEffectiveMove(moveType, defenderTypes);
+          if (categoryMatches && conditionMatches) {
+              finalPower = Math.floor(finalPower * (item.modifier || 1.0));
+          }
       }
   }
   if (defenderPokemon.item) {
@@ -5715,29 +5915,44 @@ function calculateDamage(attack, defense, level, power, category, moveType, atta
 
   // 4. 特性 (実数値補正系)
   const isGuts = isChecked('gutsCheck');
-  // あついしぼう
   if (hasDefenderAbility('あついしぼう', 'atsuishibouCheck') &&
       (moveType === 'ほのお' || moveType === 'こおり')) {
       finalPower = Math.floor(finalPower / 2);
   }
-  // はりきり
-  else if (isChecked('harikiriCheck') && category === "Physical") {
+
+  if (hasDefenderAbility('たいねつ', 'heatproofCheck') && moveType === 'ほのお') {
+      finalPower = Math.floor(finalPower / 2);
+  }
+
+  if (hasDefenderAbility('かんそうはだ', 'drySkinCheck') && moveType === 'ほのお') {
+      finalPower = Math.floor(finalPower * 125 / 100);
+  }
+
+  if (isChecked('harikiriCheck') && category === "Physical") {
     finalAttack = Math.floor(finalAttack * 150 / 100);
   }
-  // プラス
-  else if (isChecked('plusCheck') && category === "Special") {
+
+  if (isChecked('plusCheck') && category === "Special") {
     finalAttack = Math.floor(finalAttack * 150 / 100);
   }
-  // マイナス
-  else if (isChecked('minusCheck') && category === "Special") {
+
+  if (isChecked('minusCheck') && category === "Special") {
     finalAttack = Math.floor(finalAttack * 150 / 100);
   }
-  // こんじょう
-  else if (isGuts && category === "Physical") {
+
+  if (isGuts && category === "Physical") {
     finalAttack = Math.floor(finalAttack * 150 / 100);
   }
-  // ふしぎなうろこ
-  else if (hasDefenderAbility('ふしぎなうろこ', 'fushiginaurokoCheck') && category === "Physical") {
+
+  if (hasAttackerAbility('サンパワー', 'sunPowerCheck') && weather === 'sunny' && category === "Special") {
+    finalAttack = Math.floor(finalAttack * 150 / 100);
+  }
+
+  if (isChecked('slowStartCheck') && category === "Physical") {
+    finalAttack = Math.floor(finalAttack / 2);
+  }
+
+  if (hasDefenderAbility('ふしぎなうろこ', 'fushiginaurokoCheck') && category === "Physical") {
     finalDefense = Math.floor(finalDefense * 150 / 100);
   }
 
@@ -5767,6 +5982,18 @@ function calculateDamage(attack, defense, level, power, category, moveType, atta
   else if (isChecked('mushiNoShiraseCheck') && moveType === 'むし') {
     // むしのしらせ
     finalPower = Math.floor(finalPower * 150/100);
+  }
+
+  if (hasAttackerAbility('テクニシャン', 'technicianCheck') && finalPower > 0 && finalPower <= 60) {
+    finalPower = Math.floor(finalPower * 150 / 100);
+  }
+
+  if (hasAttackerAbility('すてみ', 'recklessCheck') && isRecklessMove(currentMove)) {
+    finalPower = Math.floor(finalPower * 120 / 100);
+  }
+
+  if (hasAttackerAbility('てつのこぶし', 'ironFistCheck') && isIronFistMove(currentMove)) {
+    finalPower = Math.floor(finalPower * 120 / 100);
   }
 
   // じばく・だいばくはつの防御半減
@@ -5805,12 +6032,11 @@ function calculateDamage(attack, defense, level, power, category, moveType, atta
   }
 
   // 4世代の全体技補正
-  if (isDouble && currentMove.target === 2) {
+  if (isDouble && isSpreadMove(currentMove)) {
       proc = Math.floor(proc * 3 / 4);
   }
 
   // 天候補正
-  const weather = document.getElementById('weatherSelect').value;
   if (weather === 'rain' && moveType === 'みず') {
    // あめがふりつづいている 水1.5倍
    proc = Math.floor(proc * 3 / 2);
@@ -5839,7 +6065,8 @@ function calculateDamage(attack, defense, level, power, category, moveType, atta
 
   // 急所
   if (isCritical) {
-      proc = Math.floor(proc * 2);
+      const criticalModifier = hasAttackerAbility('スナイパー', 'sniperCheck') ? 3 : 2;
+      proc = Math.floor(proc * criticalModifier);
   }
 
   // おいうち成功
@@ -5849,21 +6076,11 @@ function calculateDamage(attack, defense, level, power, category, moveType, atta
   // きつけ -> まひ
   // からげんき(状態異常時)
   // リベンジ(被ダメージ後)
-  const isTwofold = isChecked('twofoldCheck');
-  if (isTwofold) {
-      proc = Math.floor(proc * 2);
-  }
-
   // ウェザーボール(天候変化後)
-  const isWeatherBall = currentMove && currentMove.class === 'weather_ball';
-  const hasWeather = document.getElementById('weatherSelect').value !== 'none';
-  if (isWeatherBall && hasWeather) {
-    proc = Math.floor(proc * 2);
-  }
-
   const baseDamage = Math.max(1, proc);
   const isStab = attackerTypes.includes(moveType);
   const hasAdaptability = hasAttackerAbility('てきおうりょく', 'adaptabilityCheck');
+  const typeEffectiveness = getTypeEffectivenessMultiplier(moveType, defenderTypes);
 
   const rolls = [];
   for (let randomFactor = 85; randomFactor <= 100; randomFactor++) {
@@ -5877,6 +6094,13 @@ function calculateDamage(attack, defense, level, power, category, moveType, atta
       }
 
       rollDamage = getTypeEffectivenessRollDamage(rollDamage, moveType, defenderTypes);
+      if (typeEffectiveness > 1 &&
+          (hasDefenderAbility('フィルター', 'filterCheck') || hasDefenderAbility('ハードロック', 'solidRockCheck'))) {
+          rollDamage = Math.max(1, Math.floor(rollDamage * 3 / 4));
+      }
+      if (typeEffectiveness > 0 && typeEffectiveness < 1 && hasAttackerAbility('いろめがね', 'tintedLensCheck')) {
+          rollDamage = Math.floor(rollDamage * 2);
+      }
       rolls.push(rollDamage);
   }
 
@@ -5903,6 +6127,8 @@ function performDamageCalculationEnhanced() {
     document.querySelector('.tool-info').style.display = 'none';
     // ポワルンのタイプを最新の天候に更新
     updateCastformTypeIfNeeded();
+    updateArceusTypeIfNeeded();
+    updateAllDynamicMoveData();
 
     // 入力チェック
     if (!attackerPokemon.name || !defenderPokemon.name) {
@@ -6003,7 +6229,7 @@ function performDamageCalculationEnhanced() {
             attackValue,
             defenseValue,
             attackerPokemon.level,
-            currentMove.power || 0,
+            calculatePower(currentMove),
             currentMove.category,
             currentMove.type,
             attackerPokemon.types,
@@ -6045,7 +6271,7 @@ function performDamageCalculationEnhanced() {
         attackValue,
         defenseValue,
         attackerPokemon.level,
-        currentMove.power || 0,
+        calculatePower(currentMove),
         currentMove.category,
         currentMove.type,
         attackerPokemon.types,
@@ -7399,6 +7625,8 @@ function performDamageCalculationEnhanced() {
     document.querySelector('.tool-info').style.display = 'none';
     // ポワルンのタイプを最新の天候に更新
     updateCastformTypeIfNeeded();
+    updateArceusTypeIfNeeded();
+    updateAllDynamicMoveData();
 
     // 入力チェック
     if (!attackerPokemon.name || !defenderPokemon.name) {
@@ -7501,7 +7729,7 @@ function performDamageCalculationEnhanced() {
             attackValue,
             defenseValue,
             attackerPokemon.level,
-            currentMove.power || 0,
+            calculatePower(currentMove),
             currentMove.category,
             currentMove.type,
             attackerPokemon.types,
@@ -7548,7 +7776,7 @@ function performDamageCalculationEnhanced() {
         attackValue,
         defenseValue,
         attackerPokemon.level,
-        currentMove.power || 0,
+        calculatePower(currentMove),
         currentMove.category,
         currentMove.type,
         attackerPokemon.types,
@@ -8278,10 +8506,7 @@ function calculateMoveDamageRange(move, turnIndex = 0) {
     const defRank = defRankElement ? defRankElement.value : '±0';
 
     // 威力計算
-    let movePower = move.power || 0;
-    if (move.class === 'pinch_up' || move.class === 'pinch_down' || move.class === 'weight_based') {
-        movePower = calculatePower(move);
-    }
+    let movePower = calculatePower(move);
 
     // ★修正: 防御側のアイテムのみを一時的に無効化
     const originalDefenderItem = defenderPokemon.item;
@@ -8475,10 +8700,7 @@ function calculateMoveDamageRangeWithItems(move, turnIndex = 0) {
     const defRank = defRankElement ? defRankElement.value : '±0';
 
     // 威力計算
-    let movePower = move.power || 0;
-    if (move.class === 'pinch_up' || move.class === 'pinch_down' || move.class === 'weight_based') {
-        movePower = calculatePower(move);
-    }
+    let movePower = calculatePower(move);
 
     // ★重要: アイテム効果を含めてダメージ計算
     const [baseDamageMin, baseDamageMax, baseDamageRolls] = calculateDamage(
@@ -10590,10 +10812,7 @@ function displayUnifiedResults(minDamage, maxDamage, totalHP, isMultiTurn = fals
     defenderPokemon.item = null; // 防御側アイテムのみ除外
 
     // 威力計算（weight_based技などに対応）
-    let displayPower = currentMove.power || 0;
-    if (currentMove.class === 'pinch_up' || currentMove.class === 'pinch_down' || currentMove.class === 'weight_based') {
-        displayPower = calculatePower(currentMove);
-    }
+    let displayPower = calculatePower(currentMove);
 
     const [baseDisplayMin, baseDisplayMax] = calculateDamage(
         attackerOffensiveStat,
@@ -11003,7 +11222,7 @@ function displayMultiTurnResults(totalHP, isSingleMove = false) {
         attackValue,
         defenseValue,
         attackerPokemon.level,
-        currentMove.power || 0,
+        calculatePower(currentMove),
         currentMove.category,
         currentMove.type,
         attackerPokemon.types,
@@ -11426,6 +11645,8 @@ function performDamageCalculationEnhancedUnified() {
     document.querySelector('.tool-info').style.display = 'none';
     // ポワルンのタイプを最新の天候に更新
     updateCastformTypeIfNeeded();
+    updateArceusTypeIfNeeded();
+    updateAllDynamicMoveData();
 
     // 入力チェック
     if (!attackerPokemon.name || !defenderPokemon.name) {
@@ -11522,7 +11743,7 @@ function performDamageCalculationEnhancedUnified() {
         attackValue,
         defenseValue,
         attackerPokemon.level,
-        currentMove.power || 0,
+        calculatePower(currentMove),
         currentMove.category,
         currentMove.type,
         attackerPokemon.types,
