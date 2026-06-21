@@ -775,121 +775,138 @@
   {
     "name": "オッカのみ",
     "natural_gift_type": "ほのお",
+    "resist_type": "ほのお",
     "natural_gift_power": 60,
     "fling_power": 10,
-    "description": "しぜんのめぐみ: ほのお 威力60"
+    "description": "効果抜群のほのおタイプの技のダメージを半減。しぜんのめぐみ: ほのお 威力60"
   },
   {
     "name": "イトケのみ",
     "natural_gift_type": "みず",
+    "resist_type": "みず",
     "natural_gift_power": 60,
     "fling_power": 10,
-    "description": "しぜんのめぐみ: みず 威力60"
+    "description": "効果抜群のみずタイプの技のダメージを半減。しぜんのめぐみ: みず 威力60"
   },
   {
     "name": "ソクノのみ",
     "natural_gift_type": "でんき",
+    "resist_type": "でんき",
     "natural_gift_power": 60,
     "fling_power": 10,
-    "description": "しぜんのめぐみ: でんき 威力60"
+    "description": "効果抜群のでんきタイプの技のダメージを半減。しぜんのめぐみ: でんき 威力60"
   },
   {
     "name": "リンドのみ",
     "natural_gift_type": "くさ",
+    "resist_type": "くさ",
     "natural_gift_power": 60,
     "fling_power": 10,
-    "description": "しぜんのめぐみ: くさ 威力60"
+    "description": "効果抜群のくさタイプの技のダメージを半減。しぜんのめぐみ: くさ 威力60"
   },
   {
     "name": "ヤチェのみ",
     "natural_gift_type": "こおり",
+    "resist_type": "こおり",
     "natural_gift_power": 60,
     "fling_power": 10,
-    "description": "しぜんのめぐみ: こおり 威力60"
+    "description": "効果抜群のこおりタイプの技のダメージを半減。しぜんのめぐみ: こおり 威力60"
   },
   {
     "name": "ヨプのみ",
     "natural_gift_type": "かくとう",
+    "resist_type": "かくとう",
     "natural_gift_power": 60,
     "fling_power": 10,
-    "description": "しぜんのめぐみ: かくとう 威力60"
+    "description": "効果抜群のかくとうタイプの技のダメージを半減。しぜんのめぐみ: かくとう 威力60"
   },
   {
     "name": "ビアーのみ",
     "natural_gift_type": "どく",
+    "resist_type": "どく",
     "natural_gift_power": 60,
     "fling_power": 10,
-    "description": "しぜんのめぐみ: どく 威力60"
+    "description": "効果抜群のどくタイプの技のダメージを半減。しぜんのめぐみ: どく 威力60"
   },
   {
     "name": "シュカのみ",
     "natural_gift_type": "じめん",
+    "resist_type": "じめん",
     "natural_gift_power": 60,
     "fling_power": 10,
-    "description": "しぜんのめぐみ: じめん 威力60"
+    "description": "効果抜群のじめんタイプの技のダメージを半減。しぜんのめぐみ: じめん 威力60"
   },
   {
     "name": "バコウのみ",
     "natural_gift_type": "ひこう",
+    "resist_type": "ひこう",
     "natural_gift_power": 60,
     "fling_power": 10,
-    "description": "しぜんのめぐみ: ひこう 威力60"
+    "description": "効果抜群のひこうタイプの技のダメージを半減。しぜんのめぐみ: ひこう 威力60"
   },
   {
     "name": "ウタンのみ",
     "natural_gift_type": "エスパー",
+    "resist_type": "エスパー",
     "natural_gift_power": 60,
     "fling_power": 10,
-    "description": "しぜんのめぐみ: エスパー 威力60"
+    "description": "効果抜群のエスパータイプの技のダメージを半減。しぜんのめぐみ: エスパー 威力60"
   },
   {
     "name": "タンガのみ",
     "natural_gift_type": "むし",
+    "resist_type": "むし",
     "natural_gift_power": 60,
     "fling_power": 10,
-    "description": "しぜんのめぐみ: むし 威力60"
+    "description": "効果抜群のむしタイプの技のダメージを半減。しぜんのめぐみ: むし 威力60"
   },
   {
     "name": "ヨロギのみ",
     "natural_gift_type": "いわ",
+    "resist_type": "いわ",
     "natural_gift_power": 60,
     "fling_power": 10,
-    "description": "しぜんのめぐみ: いわ 威力60"
+    "description": "効果抜群のいわタイプの技のダメージを半減。しぜんのめぐみ: いわ 威力60"
   },
   {
     "name": "カシブのみ",
     "natural_gift_type": "ゴースト",
+    "resist_type": "ゴースト",
     "natural_gift_power": 60,
     "fling_power": 10,
-    "description": "しぜんのめぐみ: ゴースト 威力60"
+    "description": "効果抜群のゴーストタイプの技のダメージを半減。しぜんのめぐみ: ゴースト 威力60"
   },
   {
     "name": "ハバンのみ",
     "natural_gift_type": "ドラゴン",
+    "resist_type": "ドラゴン",
     "natural_gift_power": 60,
     "fling_power": 10,
-    "description": "しぜんのめぐみ: ドラゴン 威力60"
+    "description": "効果抜群のドラゴンタイプの技のダメージを半減。しぜんのめぐみ: ドラゴン 威力60"
   },
   {
     "name": "ナモのみ",
     "natural_gift_type": "あく",
+    "resist_type": "あく",
     "natural_gift_power": 60,
     "fling_power": 10,
-    "description": "しぜんのめぐみ: あく 威力60"
+    "description": "効果抜群のあくタイプの技のダメージを半減。しぜんのめぐみ: あく 威力60"
   },
   {
     "name": "リリバのみ",
     "natural_gift_type": "はがね",
+    "resist_type": "はがね",
     "natural_gift_power": 60,
     "fling_power": 10,
-    "description": "しぜんのめぐみ: はがね 威力60"
+    "description": "効果抜群のはがねタイプの技のダメージを半減。しぜんのめぐみ: はがね 威力60"
   },
   {
     "name": "ホズのみ",
     "natural_gift_type": "ノーマル",
+    "resist_type": "ノーマル",
     "natural_gift_power": 60,
     "fling_power": 10,
-    "description": "しぜんのめぐみ: ノーマル 威力60"
+    "description": "ノーマルタイプの技のダメージを半減。しぜんのめぐみ: ノーマル 威力60"
   },
   {
     "name": "チイラのみ",

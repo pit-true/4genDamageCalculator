@@ -126,20 +126,44 @@ function isSuperEffectiveMove(moveType, defenderTypes) {
     return getTypeEffectivenessMultiplier(moveType, defenderTypes) > 1;
 }
 
+const defenderRecoveryItemNames = new Set([
+    'たべのこし', 'くろいヘドロ', 'オボンのみ',
+    'フィラのみ', 'ウイのみ', 'マゴのみ', 'バンジのみ', 'イアのみ'
+]);
+
 function isSelectableAttackerItem(item) {
     if (!item) return false;
-    return item.timing === 'attackMod' ||
-           item.timing === 'powerMod' ||
-           item.fling_power ||
-           item.natural_gift_power ||
-           item.judgment_type;
+    if (item.timing === 'attackMod' || item.timing === 'powerMod' || item.judgment_type) {
+        return true;
+    }
+
+    if (currentMove?.class === 'fling') {
+        return Boolean(item.fling_power);
+    }
+
+    if (currentMove?.class === 'natural_gift') {
+        return Boolean(item.natural_gift_power);
+    }
+
+    return false;
 }
 
 function isSelectableDefenderItem(item) {
     if (!item) return false;
-    return item.timing !== 'attackMod' &&
-           item.timing !== 'powerMod' &&
-           !item.judgment_type;
+    return Boolean(item.b || item.d || item.resist_type || defenderRecoveryItemNames.has(item.name));
+}
+
+function isResistBerryEffective(item, moveType, defenderTypes) {
+    if (!item || item.resist_type !== moveType || !isExclusiveItemValid(item, defenderPokemon.name)) {
+        return false;
+    }
+
+    const effectiveness = getTypeEffectivenessMultiplier(moveType, defenderTypes);
+    if (moveType === 'ノーマル') {
+        return effectiveness > 0;
+    }
+
+    return effectiveness > 1;
 }
 
 // 持ち物がダメージ計算に影響するかを判定
@@ -2145,6 +2169,10 @@ function swapPokemon() {
     document.getElementById('defenderNature').value = tempInputs.nature;
     document.getElementById('defenderItem').value = tempInputs.item;
 
+    // 攻守交代で役割に合わない持ち物が移った場合は解除する
+    selectItem('attacker', document.getElementById('attackerItem').value);
+    selectItem('defender', document.getElementById('defenderItem').value);
+
     // ★修正：詳細設定の値を入れ替え
     swapDetailSettings(tempInputs);
 
@@ -3080,7 +3108,17 @@ function updateDefenderAbilityCheckboxes(abilities) {
 
 // アイテム選択
 function selectItem(side, itemName) {
-    const item = itemName ? itemData.find(i => i.name === itemName) : null;
+    const candidate = itemName ? itemData.find(i => i.name === itemName) : null;
+    const isSelectable = !candidate || (side === 'attacker'
+        ? isSelectableAttackerItem(candidate)
+        : isSelectableDefenderItem(candidate));
+    const item = isSelectable ? candidate : null;
+
+    if (!isSelectable) {
+        const input = document.getElementById(side === 'attacker' ? 'attackerItem' : 'defenderItem');
+        if (input) input.value = '';
+    }
+
     if (side === 'attacker') {
         attackerPokemon.item = item;
         updateArceusTypeIfNeeded();
@@ -5907,7 +5945,7 @@ function calculateDamage(attack, defense, level, power, category, moveType, atta
           }
       }
   }
-  if (defenderPokemon.item) {
+  if (defenderPokemon.item && isExclusiveItemValid(defenderPokemon.item, defenderPokemon.name)) {
       const item = defenderPokemon.item;
       const modifier = category === "Physical" ? (item.b || 1.0) : (item.d || 1.0);
       finalDefense = Math.floor(finalDefense * modifier);
@@ -6094,6 +6132,9 @@ function calculateDamage(attack, defense, level, power, category, moveType, atta
       }
 
       rollDamage = getTypeEffectivenessRollDamage(rollDamage, moveType, defenderTypes);
+      if (isResistBerryEffective(defenderPokemon.item, moveType, defenderTypes)) {
+          rollDamage = Math.max(1, Math.floor(rollDamage / 2));
+      }
       if (typeEffectiveness > 1 &&
           (hasDefenderAbility('フィルター', 'filterCheck') || hasDefenderAbility('ハードロック', 'solidRockCheck'))) {
           rollDamage = Math.max(1, Math.floor(rollDamage * 3 / 4));
